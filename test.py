@@ -5,7 +5,6 @@ import json
 import sys
 
 
-
 # ih = ImageHashOnDisk("test", maxlevel=8)
 ih = ImageHash(maxlevel=8)
 images = sys.stdin.readlines()
@@ -20,11 +19,11 @@ for line in images:
     # 似た画像をツリー構造で返す。
     # maxlevelを大きくするほど、細かい差を区別する。
     print(f"<h2>{name}</h2><p>")
-    for similarity in range(6,2,-1):
+    for similarity in range(6, 2, -1):
         print(f"<h3>Similarity {similarity}</h3><p>")
-        q = ih.query_by_image(image, similarity=similarity)
+        q = ih.query(image, similarity=similarity)
         if q is not None:
             for path in q:
-                print(f"<img src='file://{path}' width='100px' height='auto' />")
+                print(
+                    f"{path}<br /><img src='file://{path}' width-max='100px' height='100px' /><br />")
     print("</p>")
-
