@@ -6,15 +6,18 @@
 
 import cv2
 import numpy as np
-from collections import defaultdict
+# from collections import defaultdict
 import sys
+from contextlib import contextmanager
+
 
 class ImageHash():
     def __init__(self, maxlevel=8):
         # file path to thumbnail hashes
         self.thumbs = dict()
         # thumbnail hash files
-        self.locations = defaultdict(set)
+        self.locations = dict()
+        # self.locations = defaultdict(set)
         self.maxlevel = maxlevel
 
     def coarsegrain(self, image, level=1):
@@ -27,7 +30,7 @@ class ImageHash():
                 image,
                 cv2.COLOR_BGR2GRAY),
             (width,
-            width)).astype(int)
+             width)).astype(int)
         vmin = np.min(tn)
         vmax = np.max(tn)
         if vmin == vmax or tn is None:
@@ -36,16 +39,18 @@ class ImageHash():
 
     def query(self, image, similarity=8):
         if image is None:
-            return []
+            return set()
         if similarity > self.maxlevel:
             similarity = self.maxlevel
         tn = self.coarsegrain(image, similarity)
-        return self.locations[tn]
+        if tn in self.locations:
+            return self.locations[tn]
+        return set()
 
     def delete(self, path):
         if path not in self.thumbs:
             return
-        for tn in self.thumbs[path]:
+        for tn in self.thumbs[path][1:]:
             self.locations[tn].remove(path)
         del self.thumbs[path]
 
@@ -53,11 +58,20 @@ class ImageHash():
         if image is None:
             return
         if path in self.thumbs:
-            assert not overwrite
+            assert overwrite
             self.delete(path)
         thumbs = [0, ]
         for level in range(1, self.maxlevel + 1):
             tn = self.coarsegrain(image, level)
-            self.locations[tn].add(path)
+            if tn not in self.locations:
+                self.locations[tn] = set()
+            # add/append is not effective with sqlitedict. why??
+            self.locations[tn] |= set({path})
+            # print(f"added {path} to {tn}: {self.locations[tn]}")
             thumbs.append(tn)
         self.thumbs[path] = thumbs
+
+
+@contextmanager
+def open(maxlevel=8):
+    yield ImageHash(maxlevel)
