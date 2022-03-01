@@ -1,4 +1,4 @@
-from imagehashondisk import open
+from imagehashondisk import ihopen
 import PIL
 import argparse
 
@@ -10,7 +10,7 @@ parser.add_argument('file', metavar="FILE", type=str,
 
 args = parser.parse_args()
 
-with open("store", flag='r') as ih:
+with ihopen("store", flag='r') as ih:
     image = PIL.Image.open(args.file)
     for path in ih.query(image, similarity=args.level):
         print(path)

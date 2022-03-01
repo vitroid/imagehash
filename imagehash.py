@@ -67,5 +67,5 @@ class ImageHash():
 
 
 @contextmanager
-def open(maxlevel=8):
+def ihopen(maxlevel=8):
     yield ImageHash(maxlevel)

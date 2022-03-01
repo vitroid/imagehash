@@ -1,8 +1,8 @@
-from imagehashondisk import open
+from imagehashondisk import ihopen
 import sys
 import cv2
 
-with open("store", flag='r') as ih:
+with ihopen("store", flag='r') as ih:
     lines = sys.stdin.readlines()
     for line in lines:
         name = line.strip()

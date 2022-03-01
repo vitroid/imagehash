@@ -1,6 +1,6 @@
-from imagehashondisk import open
+from imagehashondisk import ihopen
 
-with open("store", flag='r') as ih:
+with ihopen("store", flag='r') as ih:
     print(len(ih.thumbs))
     for path, ths in ih.thumbs.items():
         print(path, ths)

@@ -21,7 +21,7 @@ class ImageHashOnDisk(ImageHash):
 
 
 @contextmanager
-def open(name, flag='c', maxlevel=8):
+def ihopen(name, flag='c', maxlevel=8):
     ih = ImageHashOnDisk(name, flag=flag, maxlevel=maxlevel)
     yield ih
     ih.thumbs.commit()
