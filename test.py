@@ -1,29 +1,15 @@
-from imagehash import ImageHash
-# from imagehashondisk import ImageHashOnDisk
+from imagehashondisk import open
+# from imagehash import open
 import cv2
-import json
 import sys
 
 
-# ih = ImageHashOnDisk("test", maxlevel=8)
-ih = ImageHash(maxlevel=8)
-images = sys.stdin.readlines()
-for line in images:
-    name = line.strip()
-    image = cv2.imread(name)
-    ih.register(image, name)
-
-for line in images:
-    name = line.strip()
-    image = cv2.imread(name)
-    # 似た画像をツリー構造で返す。
-    # maxlevelを大きくするほど、細かい差を区別する。
-    print(f"<h2>{name}</h2><p>")
-    for similarity in range(6, 2, -1):
-        print(f"<h3>Similarity {similarity}</h3><p>")
-        q = ih.query(image, similarity=similarity)
-        if q is not None:
-            for path in q:
-                print(
-                    f"{path}<br /><img src='file://{path}' width-max='100px' height='100px' /><br />")
-    print("</p>")
+with open("test") as ih:
+    # with open() as ih:
+    lines = sys.stdin.readlines()
+    for line in lines:
+        name = line.strip()
+        print(name)
+        image = cv2.imread(name)
+        ih.register(image, name)
+    print(len(ih.thumbs))

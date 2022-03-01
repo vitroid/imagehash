@@ -4,9 +4,8 @@
 #
 # このprototypeでは、ディレクトリに実際に保存するのではなく # メモリー上ですべて処理する。
 
-import cv2
+from PIL import Image
 import numpy as np
-# from collections import defaultdict
 import sys
 from contextlib import contextmanager
 
@@ -25,12 +24,7 @@ class ImageHash():
         assert image is not None
         width = 2**level
         depth = width
-        tn = cv2.resize(
-            cv2.cvtColor(
-                image,
-                cv2.COLOR_BGR2GRAY),
-            (width,
-             width)).astype(int)
+        tn = image.convert('L').resize([width,width])
         vmin = np.min(tn)
         vmax = np.max(tn)
         if vmin == vmax or tn is None:

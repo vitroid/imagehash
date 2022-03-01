@@ -1,5 +1,5 @@
 from imagehashondisk import open
-import cv2
+import PIL
 import argparse
 
 parser = argparse.ArgumentParser(description='Process some integers.')
@@ -11,6 +11,6 @@ parser.add_argument('file', metavar="FILE", type=str,
 args = parser.parse_args()
 
 with open("store", flag='r') as ih:
-    image = cv2.imread(args.file)
+    image = PIL.Image.open(args.file)
     for path in ih.query(image, similarity=args.level):
         print(path)

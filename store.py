@@ -1,7 +1,7 @@
 from imagehashondisk import open
 # from imagehash import open
-import cv2
 import sys
+import PIL
 
 
 with open("store") as ih:
@@ -10,6 +10,6 @@ with open("store") as ih:
     for line in lines:
         name = line.strip()
         print(name)
-        image = cv2.imread(name)
+        image = PIL.Image.open(name)
         ih.register(image, name)
     print(len(ih.thumbs))

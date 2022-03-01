@@ -1,6 +1,4 @@
 from imagehashondisk import open
-import sys
-import cv2
 
 with open("store", flag='r') as ih:
     print(len(ih.thumbs))
