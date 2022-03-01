@@ -1,5 +1,4 @@
 from imagehashondisk import open
-import sys
 import cv2
 import argparse
 
